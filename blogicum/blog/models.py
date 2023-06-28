@@ -6,7 +6,9 @@ User = get_user_model()
 
 
 class BaseModel(models.Model):
-    created_at = models.DateTimeField(verbose_name='Добавлено', auto_now_add=True)
+    created_at = models.DateTimeField(
+        verbose_name='Добавлено',
+        auto_now_add=True)
     is_published = models.BooleanField(
         default=True,
         verbose_name='Опубликовано',
@@ -64,7 +66,8 @@ class Post(BaseModel):
 
     pub_date = models.DateTimeField(
         verbose_name='Дата и время публикации',
-        help_text='Если установить дату и время в будущем — можно делать отложенные публикации.'
+        help_text='Если установить дату и время в будущем — \
+можно делать отложенные публикации.'
     )
     author = models.ForeignKey(
         User,

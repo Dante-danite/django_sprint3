@@ -30,12 +30,19 @@ def post_detail(request, post_id):
 
 def category_posts(request, slug):
     template = 'blog/category.html'
-    category = get_object_or_404(Category, slug=slug, is_published=True)
+    category = get_object_or_404(
+        Category,
+        slug=slug,
+        is_published=True
+    )
     post_list = Post.objects.filter(
         pub_date__lt=now,
         is_published=True,
-        category=category 
+        category=category
     )
-    context = {'category': category, 'post_list': post_list}
+    context = {
+        'category': category,
+        'post_list': post_list
+    }
 
     return render(request, template, context)

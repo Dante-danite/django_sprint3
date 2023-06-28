@@ -48,7 +48,7 @@ class Migration(migrations.Migration):
                 ('is_published', models.BooleanField(default=True)),
                 ('title', models.CharField(max_length=256)),
                 ('text', models.CharField(max_length=256)),
-                ('pub_date', models.DateField()),
+                ('pub_date', models.DateTimeField()),
                 ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
                 ('category', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='blog.category')),
                 ('location', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='blog.location')),

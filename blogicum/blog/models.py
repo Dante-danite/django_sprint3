@@ -6,7 +6,7 @@ User = get_user_model()
 
 
 class BaseModel(models.Model):
-    created_at = models.DateTimeField(verbose_name='Добавлено')
+    created_at = models.DateTimeField(verbose_name='Добавлено', auto_now_add=True)
     is_published = models.BooleanField(
         default=True,
         verbose_name='Опубликовано',
@@ -16,25 +16,28 @@ class BaseModel(models.Model):
     class Meta:
         abstract = True
 
+    def __str__(self):
+        return self.title
+
 
 class Category(BaseModel):
     title = models.CharField(
         max_length=256,
         verbose_name='Заголовок'
     )
-    description = models.CharField(
-        max_length=256,
-        verbose_name='Опмсание'
-    )
+    description = models.TextField(verbose_name='Описание')
     slug = models.SlugField(
         unique=True,
-        verbose_name='Индификатор',
+        verbose_name='Идентификатор',
         help_text='Идентификатор страницы для URL; разрешены символы латиницы, цифры, дефис и подчёркивание.'
     )
 
     class Meta:
         verbose_name = 'категория'
         verbose_name_plural = 'Категории'
+
+    def __str__(self):
+        return self.title
 
 
 class Location(BaseModel):
@@ -47,16 +50,17 @@ class Location(BaseModel):
         verbose_name = 'местоположение'
         verbose_name_plural = 'Местоположения'
 
+    def __str__(self):
+        return self.title
+
 
 class Post(BaseModel):
     title = models.CharField(
         max_length=256,
         verbose_name='Заголовок'
     )
-    text = models.CharField(
-        max_length=256,
-        verbose_name='Текст'
-    )
+    text = models.TextField(verbose_name='Текст')
+
     pub_date = models.DateTimeField(
         verbose_name='Дата и время публикации',
         help_text='Если установить дату и время в будущем — можно делать отложенные публикации.'
@@ -70,7 +74,7 @@ class Post(BaseModel):
         Location,
         null=True,
         on_delete=models.SET_NULL,
-        verbose_name='Место положения'
+        verbose_name='Местоположение'
     )
     category = models.ForeignKey(
         Category,
@@ -82,3 +86,6 @@ class Post(BaseModel):
     class Meta:   
         verbose_name = 'публикация'
         verbose_name_plural = 'Публикации'
+
+    def __str__(self):
+        return self.title

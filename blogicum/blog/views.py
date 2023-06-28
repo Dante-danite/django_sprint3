@@ -6,34 +6,36 @@ now = datetime.datetime.now()
 
 def index(request):
     template = 'blog/index.html'
-    post_list = Post.objects.values('title').filter(
+    post_list = Post.objects.filter(
         category__is_published=True,
         is_published=True,
-        pub_date__lte=now).order_by('-id')[:5]
+        pub_date__lt=now).order_by('-id')[:5]
     context = {'post_list': post_list}
 
     return render(request, template, context)
 
 
 def post_detail(request, post_id):
-    detail_post = Post.objects.get(post_id=post_id)
-    post = get_object_or_404(Category, is_published=False, pub_date__gt=now, category__is_published=False)
+    post = get_object_or_404(
+        Post, id=post_id,
+        is_published=True,
+        pub_date__lt=now,
+        category__is_published=True
+    )
     template = 'blog/detail.html'
-    context = {'detail_post': detail_post, 'post': post}
+    context = {'post': post}
 
     return render(request, template, context)
 
 
 def category_posts(request, slug):
     template = 'blog/category.html'
-    post = get_object_or_404(Category, is_published=False)
-    post_category = Post.objects.all().filter(
-        slug=slug,
+    category = get_object_or_404(Category, slug=slug, is_published=True)
+    post_list = Post.objects.filter(
+        pub_date__lt=now,
         is_published=True,
-        pub_date__lte=now)
-    context = {
-        'post_category': post_category,
-        'posts': post
-    }
+        category=category 
+    )
+    context = {'category': category, 'post_list': post_list}
 
     return render(request, template, context)

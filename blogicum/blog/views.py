@@ -1,23 +1,24 @@
-from blog.models import Category, Post
+from django.utils import timezone
 from django.conf import settings
 from django.shortcuts import get_object_or_404, render
-from django.utils import timezone
 
-now = timezone.now()
+from blog.models import Category, Post
 
 
 def index(request):
+    now = timezone.now()
     template = 'blog/index.html'
-    post_list = Post.objects.filter(
+    posts = Post.objects.filter(
         category__is_published=True,
         is_published=True,
         pub_date__lt=now).order_by('-id')[:settings.POSTS_LIMIT]
-    context = {'post_list': post_list}
+    context = {'post_list': posts}
 
     return render(request, template, context)
 
 
 def post_detail(request, post_id):
+    now = timezone.now()
     posts = get_object_or_404(
         Post,
         id=post_id,
@@ -32,6 +33,7 @@ def post_detail(request, post_id):
 
 
 def category_posts(request, slug):
+    now = timezone.now()
     template = 'blog/category.html'
     category = get_object_or_404(
         Category,

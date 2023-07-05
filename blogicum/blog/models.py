@@ -17,9 +17,6 @@ class BaseModel(models.Model):
     class Meta:
         abstract = True
 
-    def __str__(self):
-        return self.title
-
 
 class Category(BaseModel):
     title = models.CharField(
@@ -52,9 +49,6 @@ class Location(BaseModel):
         verbose_name = 'местоположение'
         verbose_name_plural = 'Местоположения'
 
-    def __str__(self):
-        return self.title
-
 
 class Post(BaseModel):
     title = models.CharField(
@@ -75,7 +69,7 @@ class Post(BaseModel):
     location = models.ForeignKey(
         Location,
         null=True,
-        blank=False,
+        blank=True,
         on_delete=models.SET_NULL,
         related_name='posts',
         verbose_name='Местоположение'
